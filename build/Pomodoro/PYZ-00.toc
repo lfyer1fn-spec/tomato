@@ -1,4 +1,4 @@
-('D:\\pomedor\\build\\Pomodoro\\PYZ-00.pyz',
+('D:\\.Actual Project\\Project\\pomedor\\build\\Pomodoro\\PYZ-00.pyz',
  [('__future__', 'D:\\Py\\Lib\\__future__.py', 'PYMODULE'),
   ('_colorize', 'D:\\Py\\Lib\\_colorize.py', 'PYMODULE'),
   ('_compat_pickle', 'D:\\Py\\Lib\\_compat_pickle.py', 'PYMODULE'),
