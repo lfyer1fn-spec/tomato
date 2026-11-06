@@ -7,6 +7,7 @@ import tkinter as tk
 from tkinter import messagebox
 
 BASE = 340
+WINDOW = 254
 TOMATO_R = 132
 FACE_R = 104
 RING_R = 78
@@ -219,8 +220,8 @@ class PomodoroTimer:
 
         root.configure(bg=BG)
         root.title("Pomodoro")
-        root.geometry("420x660")
-        root.minsize(400, 600)
+        root.geometry(f"{WINDOW}x{WINDOW}")
+        root.minsize(WINDOW, WINDOW)
         root.protocol("WM_DELETE_WINDOW", self.on_close)
 
         self.running = False
@@ -229,49 +230,52 @@ class PomodoroTimer:
         self.total = 0.0
         self.remaining = 0.0
 
-        top_frame = tk.Frame(root, bg=BG)
-        top_frame.pack(fill="x", padx=12, pady=(10, 0))
-        self.gear_button = RoundedButton(
-            top_frame, "⚙", self.open_settings, PLATE, bg=BG,
-            width=46, height=42, radius=13,
-            font=("Segoe UI Symbol", 17), text_color=TOMATO_RIM,
-            outline=TRACK)
-        self.gear_button.pack(side="right")
+        input_frame = tk.Frame(root, bg=BG)
+        input_frame.pack(side="bottom", pady=(0, 2))
 
         button_frame = tk.Frame(root, bg=BG)
-        button_frame.pack(side="bottom", pady=(6, 18))
+        button_frame.pack(side="bottom", pady=(4, 8))
 
-        input_frame = tk.Frame(root, bg=BG)
-        input_frame.pack(side="bottom")
-
-        self.canvas = tk.Canvas(root, width=BASE, height=BASE,
-                                bg=BG, highlightthickness=0)
-        self.canvas.pack(fill="both", expand=True, padx=10, pady=(2, 4))
+        self.canvas = tk.Canvas(root, bg=BG, highlightthickness=0)
+        self.canvas.pack(fill="both", expand=True, padx=4, pady=(4, 0))
         self.canvas.bind("<Configure>", self._on_resize)
+
+        self.gear_button = RoundedButton(
+            root, "⚙", self.open_settings, PLATE, bg=BG,
+            width=30, height=28, radius=9,
+            font=("Segoe UI Symbol", 11), text_color=TOMATO_RIM,
+            outline=TRACK)
+        self.gear_button.place(relx=1.0, x=-6, y=6, anchor="ne")
 
         vcmd = (root.register(self._validate), "%P")
         self.entries = []
         self.field_labels = []
         for i, default in enumerate(saved_time):
             label = tk.Label(input_frame, bg=BG, fg=MUTED,
-                             font=("Helvetica", 9, "bold"))
-            label.grid(row=0, column=i, padx=9)
+                             font=("Helvetica", 7, "bold"))
+            label.grid(row=0, column=i, padx=5)
             self.field_labels.append(label)
-            entry = tk.Entry(input_frame, width=4, justify="center", relief="flat",
-                             font=("Helvetica", 17, "bold"), fg=INK,
-                             bg="white", highlightthickness=2,
+            entry = tk.Entry(input_frame, width=3, justify="center", relief="flat",
+                             font=("Helvetica", 12, "bold"), fg=INK,
+                             bg="white", highlightthickness=1,
                              highlightbackground=TRACK, highlightcolor=TOMATO,
                              validate="key", validatecommand=vcmd)
             entry.insert(0, str(default))
-            entry.grid(row=1, column=i, padx=9, pady=(2, 0), ipady=5)
+            entry.grid(row=1, column=i, padx=5, pady=(1, 0), ipady=2)
             self.entries.append(entry)
 
-        self.start_button = RoundedButton(button_frame, "", self.start, TOMATO, bg=BG)
-        self.start_button.pack(side="left", padx=4)
-        self.pause_button = RoundedButton(button_frame, "", self.toggle_pause, "#f39c12", bg=BG)
-        self.pause_button.pack(side="left", padx=4)
-        self.reset_button = RoundedButton(button_frame, "", self.reset, GREY, bg=BG)
-        self.reset_button.pack(side="left", padx=4)
+        self.start_button = RoundedButton(button_frame, "", self.start, TOMATO, bg=BG,
+                                          width=74, height=30, radius=10,
+                                          font=("Helvetica", 8, "bold"))
+        self.start_button.pack(side="left", padx=2)
+        self.pause_button = RoundedButton(button_frame, "", self.toggle_pause, "#f39c12",
+                                          bg=BG, width=74, height=30, radius=10,
+                                          font=("Helvetica", 8, "bold"))
+        self.pause_button.pack(side="left", padx=2)
+        self.reset_button = RoundedButton(button_frame, "", self.reset, GREY, bg=BG,
+                                          width=74, height=30, radius=10,
+                                          font=("Helvetica", 8, "bold"))
+        self.reset_button.pack(side="left", padx=2)
 
         self.apply_language()
         self.reset()
@@ -439,7 +443,7 @@ class PomodoroTimer:
             c.create_polygon(flat, tags="clock", **kw)
 
         def font(size, weight="bold"):
-            return ("Helvetica", max(8, int(size * k)), weight)
+            return ("Helvetica", max(7, int(size * k)), weight)
 
         circle(4, 7, TOMATO_R, fill="#ead6cb", outline="")
         circle(0, 0, TOMATO_R, fill=TOMATO_RIM, outline="")
@@ -484,7 +488,7 @@ class PomodoroTimer:
         status = self.t("focus") if self.running else self.t("ready")
         pill_color = TOMATO if self.running else "#efe5df"
         pill_text = "#ffffff" if self.running else MUTED
-        pill_w = (96 if self.running else 78) * k
+        pill_w = (110 if self.running else 92) * k
         px, py = at(0, 34)
         _round_rect(c, px - pill_w / 2, py - 12 * k, px + pill_w / 2, py + 12 * k,
                     11 * k, fill=pill_color, outline="", tags="clock")
